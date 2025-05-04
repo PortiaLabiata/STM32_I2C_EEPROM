@@ -2,7 +2,8 @@
 #include "core/system.h"
 #include "core/types.h"
 
-#define IIC_WRITE   0b0UL
+#define IIC_WRITE_REQUEST   0b0UL
+#define IIC_READ_REQUEST    0b1UL
 
 /* Typedefs */
 
@@ -15,3 +16,4 @@ typedef enum {
 /* Prototypes */
 
 IIC_Status_t IIC_SendBytes(uint32_t addr, uint8_t *bytes, uint32_t size);
+IIC_Status_t IIC_ReadBytes(uint32_t addr, uint8_t *bytes, uint32_t size);
