@@ -130,7 +130,7 @@ void Clock_Config(void) {
         __NOP();
     }
 
-    RCC->CFGR |= (RCC_CFGR_PLLMULL12 | RCC_CFGR_SW_PLL);
+    RCC->CFGR |= (RCC_CFGR_PLLMULL12 | RCC_CFGR_SW_PLL | RCC_CFGR_PPRE1_DIV2);
     RCC->CR |= RCC_CR_PLLON;
     while (!(RCC->CR & RCC_CR_PLLRDY_Msk)) {
         __NOP();
@@ -156,4 +156,26 @@ void GPIO_Config(void) {
     RCC->APB2ENR |= RCC_APB2ENR_IOPCEN;
     GPIOC->CRH &= ~GPIO_CRH_CNF13_Msk;
     GPIOC->CRH |= (GPIO_CRH_CNF13_0 | GPIO_CRH_MODE13_1);
+}
+
+void I2C_Config(void) {
+    RCC->APB1ENR |= RCC_APB1ENR_I2C1EN;
+    RCC->APB2ENR |= RCC_APB2ENR_IOPBEN;
+
+    /* Configure AFIO */
+    GPIOB->CRL &= ~(GPIO_CRL_CNF6_Msk | GPIO_CRL_CNF7_Msk);
+    GPIOB->CRL |= (GPIO_CRL_CNF6_0 | GPIO_CRL_CNF6_1 | GPIO_CRL_CNF7_0 | GPIO_CRL_CNF7_1);
+    GPIOB->CRL |= (GPIO_CRL_MODE6_1 | GPIO_CRL_MODE7_1);
+
+    I2C1->CR1 |= I2C_CR1_ACK;
+    // No need to enable clock stretching or general calls, since reset value is 0
+    I2C1->CR2 |= ((PCLK1_FREQ/1000000) << I2C_CR2_FREQ_Pos); // Set clock frequency to PCLK1 frequency
+    I2C1->CCR = IIC_CCR; // CCR = THigh / TPCLK1
+    /* Honestly, I have no earthly idea, what this thing does. It says, that it sets the rise period
+    for the SCL line, but I have no idea, how. Like, there is no official info, even on forums.
+    I am writing this in, like, a middle of the night, and official ST docs are so friging stupid. 
+    I think it is written by a bunch of interns with a total brain capacity of, well, 
+    less than me, which is a goddamn world record.  */
+    I2C1->TRISE = (PCLK1_FREQ / 1000000) + 1;
+    I2C1->CR1 |= I2C_CR1_PE; // Device enable
 }
