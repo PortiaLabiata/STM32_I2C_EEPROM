@@ -7,13 +7,6 @@
 
 /* Typedefs */
 
-typedef enum {
-    IIC_OK,
-    IIC_CONFIG_ERROR,
-    IIC_RUNT_AF_ERROR,
-    IIC_RUNT_MS_ERROR,
-    IIC_RUNT_OR_ERROR
-} IIC_Status_t;
 
 /* Macros */
 

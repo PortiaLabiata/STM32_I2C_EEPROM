@@ -1,5 +1,6 @@
 #pragma once
 #include <stm32f103x6.h>
+#include "core/types.h"
 
 #define HSI_FREQ                8000000 // HSI frequency in Hz
 #define HSE_FREQ                0       // Since I don't have HSE
@@ -26,7 +27,7 @@ extern volatile uint32_t _current_ticks;
 
 void Clock_Config(void);
 void GPIO_Config(void);
-void I2C_Config(void);
+IIC_Status_t I2C_Config(void);
 
 /* Information functions */
 

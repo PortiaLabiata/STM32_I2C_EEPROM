@@ -158,7 +158,7 @@ void GPIO_Config(void) {
     GPIOC->CRH |= (GPIO_CRH_CNF13_0 | GPIO_CRH_MODE13_1);
 }
 
-void I2C_Config(void) {
+IIC_Status_t I2C_Config(void) {
     RCC->APB1ENR |= RCC_APB1ENR_I2C1EN;
     RCC->APB2ENR |= RCC_APB2ENR_IOPBEN;
 
@@ -178,4 +178,5 @@ void I2C_Config(void) {
     less than me, which is a goddamn world record.  */
     I2C1->TRISE = (PCLK1_FREQ / 1000000) + 1;
     I2C1->CR1 |= I2C_CR1_PE; // Device enable
+    return IIC_OK;
 }
