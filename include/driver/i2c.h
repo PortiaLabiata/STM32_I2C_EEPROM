@@ -10,8 +10,17 @@
 typedef enum {
     IIC_OK,
     IIC_CONFIG_ERROR,
-    IIC_RUNT_ERROR
+    IIC_RUNT_AF_ERROR,
+    IIC_RUNT_MS_ERROR,
+    IIC_RUNT_OR_ERROR
 } IIC_Status_t;
+
+/* Macros */
+
+#define EMERGENCY_STOP() do { \
+    I2C1->CR1 &= ~I2C_CR1_START_Msk; \
+    I2C1->CR1 |= I2C_CR1_STOP; \
+} while(0)
 
 /* Basic IO prototypes */
 
